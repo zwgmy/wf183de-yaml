@@ -1,40 +1,6 @@
 substitutions:
-#ADC define 
-  adc0pin: GPIO0
-  update0_time: 60s
-
-  pirpin: GPIO1
-
-  spiclkpin: GPIO2 #2
-  spimosipin: GPIO3 #3
-
   i2csdapin: GPIO4
   i2csclpin: GPIO5
-
-  wsbusypin: GPIO6
-
-  dallaspin: GPIO8
-  dallas_utime: 60s
-  
-  swpin: GPIO11
-  bellpin: GPIO12
-  irtpin: GPIO13
-
-  #max7219cspin: GPIO18
-
-  spidcpin: GPIO10
-  st7789cspin: GPIO12
-  #GPIO19
-  st7789rstpin: GPIO11
-  st7789blcpin: GPIO11
-
-  eink_full_update_t: '180'
-  bh1750_updatetime: 5s
-  bmp280_updatetime: 10s
-  aht25_updatetime: 60s
-
-  esptime: sntp_time
-  colorline: color_line
 
 esphome:
   name: esp32c3ch340-2-2
@@ -45,12 +11,6 @@ esphome:
     board_build.flash_size: 4MB
     board_build.mcu: esp32c3
 
-  on_boot:
-    - then:
-      - light.turn_on:
-          id: light_1
-          brightness: 85%
-      priority: -100.0
   includes:
     - wf183de_sensor.h
     
@@ -59,150 +19,26 @@ esp32:
   variant: ESP32C3 
   framework:
     type: arduino
-#    type: esp-idf
-  # currently needed, but not in the future
-#    version: latest
-#    platform_version: 6.3.2
 
 # Enable logging
 logger:
 # level: error
 # Enable Home Assistant API
-api:
-  encryption:
-    key: "yvDcik7cTJ+f84UxSO70HHwcngjdc7FQ1cJK/sbZC3g="
-#  reboot_timeout: 0s    
 
-ota:
-  platform: esphome
-  password: "4208007637bde6a36895eab76ccf84d1"
 
 network:
   enable_ipv6: true
   min_ipv6_addr_count: 2
 
-wifi:
-
-#  manual_ip:
-#    static_ip: 192.168.50.103
-#    gateway: 192.168.50.1
-#    subnet: 255.255.255.0
-#  manual_ip:
-#   static_ip: 192.168.2.82
-#   gateway: 192.168.2.1
-#   subnet: 255.255.255.0
-#   dns1: 223.5.5.5
-#  fast_connect: true
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-#  reboot_timeout: 0s   
-  ap:
-    ssid: "Esp32C3Ch340-2-2"
-    password: "12345678"
- 
-
 
 
 captive_portal:
-
-spi:
-  clk_pin: 2 #${spiclkpin}
-  mosi_pin: 3 #${spimosipin}
-#  miso_pin: GPIO10
-  id: spi_bus1
-  interface: hardware
-
 i2c:
   sda: ${i2csdapin}
   scl: ${i2csclpin}
   scan: True
   id: bus_a
   frequency: 100k
-
-
-
-
-globals:
-
-  - id: setting_mode
-    type: bool
-    restore_value: no
-    initial_value: 'false'
-
-
-
-display:
-  - platform: ili9xxx
-    model: st7789v
-#    model: Custom
-    dimensions:
-      height: 240
-      width: 240
-      offset_height: 0
-      offset_width: 0
-    rotation: 0
-    id: st7789vd
-    cs_pin: GPIO7
-    dc_pin: GPIO6
-    reset_pin: GPIO10
-#    backlight_pin: GPIO11    
-    data_rate: 40MHz
-    update_interval: 1s
-#    eightbitcolor: true
-    auto_clear_enabled: true
-    invert_colors: true
-    show_test_card: false
-    color_order: bgr
-#    background_color: 0, 0, 0;
-    pages:
-      - id: page1
-        lambda: |-        
-          if (id(sw12).state) 
-          {
-          it.print(0, 80, id(sszh24), id(my_yellow), TextAlign::CENTER_LEFT, "hello page1");
-          } else {
-          it.print(0, 80, id(sszh24), id(my_red), TextAlign::CENTER_LEFT, "hello world!");
-          }
-#        lambda: |-
-#          it.print(0, 80, id(sszh24), id(my_white), TextAlign::CENTER_LEFT, "hello page1");
-
-      - id: page2
-        lambda: |-
-          it.print(0, 0, id(sszh24), "My menu is not page2");
-
-
-
-
-binary_sensor:
-#####joystick 按键#######
-  - platform: gpio
-    pin:
-      number: GPIO9
-      mode:
-        input: true
-        pullup: true
-      inverted: True
-    name: k1
-    id: k1
-    internal: true
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
-#    on_press:
-#      - display_menu.enter: my_graphical_display_menu
-##进入设置界面
- 
-#            id(setting_mode) = !id(setting_mode);
-#            if (id(setting_mode)) {
-#              ESP_LOGD("main", "Entering setting mode");
-#            } else {
-#              ESP_LOGD("main", "Exiting setting mode");}
-
-
-
-
-# Custom component for the WF183DE sensor
-
-
 
 
 sensor:
@@ -219,108 +55,3 @@ sensor:
         unit_of_measurement: "kPa"
         accuracy_decimals: 1
 
-
-
-  - platform: rotary_encoder
-    name: "Rotary Encoder"
-    pin_a: GPIO1
-    pin_b: GPIO0
-    min_value: 0
-    max_value: 300
-    resolution: 1
-    id: rotary_encoder1
-    filters:
-      debounce: 30ms
- #   on_clockwise:
- #     - if:
-#          condition:
-#            display_menu.is_active: my_graphical_display_menu
-#          then:
-#            - display_menu.down: my_graphical_display_menu
- #         else:
- #           - display.page.show_next: st7789vd
-#            - component.update: st7789vd
- #     - display_menu.down: my_graphical_display_menu
-#      then:
-#        - display.page.show_next: st7789vd
- #   on_anticlockwise:
-#      - if:
-#          condition:
-#            display_menu.is_active: my_graphical_display_menu
-#          then:
-#            - display_menu.up: my_graphical_display_menu
- #         else:
-#            - display.page.show_previous: st7789vd
-#            - component.update: st7789vd
-#    pin_reset: GPIO12
-#    restore_mode: ALWAYS_ZERO
-#    filters:
-#      debounce: 30ms
-#    on_value:
-#      then:
-#        - globals.set:
-#            id: target_temperature
-#            value: !lambda 'return id(rotary_encoder1).state;'
-#        - component.update: st7789vd
-
-
-
-
-
-
-# Individual outputs
-output:
-  - platform: ledc
-    pin: ${st7789blcpin}  
-    id: blcpin
-
-
-
-
-switch:
-
-
-  - platform: gpio
-    name: "12_switch"
-    id: sw12
-    pin: 
-      number: GPIO12
-      ignore_pin_validation_error: true
-#    publish_initial_state: true
-  
-
-
-  - platform: gpio
-    name: "13_switch"
-    id: sw13
-    pin: 
-      number: GPIO13
-      ignore_pin_validation_error: true  
-
-
-light:
-  - platform: monochromatic
-    output: blcpin
-    name: "Backlight"
-    id: light_1
-    restore_mode: RESTORE_AND_ON
-
-color:
-#100%表示关闭  
-  - id: my_red
-    hex: ff0000
-
-
-  - id: my_yellow
-    hex: ffde00
-
-
-  - id: my_white
-    hex: FFFFFF
-
-
-font:
-  - file: 'syhtRegular.ttf'
-    id: sszh24
-    size: 24
-    glyphs: 电压流功率!"%/()+,=-_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
