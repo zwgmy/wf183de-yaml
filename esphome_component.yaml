@@ -1,0 +1,6 @@
+name: "WF183DE Sensor"
+domain: wf183de
+version: "1.0"
+requirements: []
+codeowners:
+  - "@zwgmy"
