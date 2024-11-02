@@ -38,13 +38,14 @@ i2c:
   scl: ${i2csclpin}
   scan: True
   id: bus_a
-  frequency: 100k
+  frequency: 200k
+
 
 
 sensor:
   - platform: custom
     lambda: |-
-      auto *wf183de_sensor = new WF183DESensor();
+      auto wf183de_sensor = new esphome::wf183de::WF183DESensor(10000);  // 10秒更新一次
       App.register_component(wf183de_sensor);
       return {wf183de_sensor->get_temperature_sensor(), wf183de_sensor->get_pressure_sensor()};
     sensors:
@@ -53,5 +54,7 @@ sensor:
         accuracy_decimals: 1
       - name: "WF183DE Pressure"
         unit_of_measurement: "kPa"
-        accuracy_decimals: 1
+        accuracy_decimals: 2
+
+        
 
