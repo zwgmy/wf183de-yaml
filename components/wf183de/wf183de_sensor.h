@@ -1,10 +1,9 @@
 #pragma once
-
-#include "esphome/components/bmp280_base/bmp280_base.h"
+#include "esphome.h"
 #include "esphome/components/i2c/i2c.h"
 
-namespace esphome {
-namespace bmp280_i2c {
+#define WF183DE_I2C_ADDRESS 0x6D  // 使用实际的I2C地址
+
 
 static const char *const TAG = "bmp280_i2c.sensor";
 
@@ -18,12 +17,6 @@ class BMP280I2CComponent : public esphome::bmp280_base::BMP280Component, public 
   void dump_config() override;
 };
 
-}  // namespace bmp280_i2c
-}  // namespace esphome
-
-///*************************
-#include "esphome.h"
-#define WF183DE_I2C_ADDRESS 0x6D  // 使用实际的I2C地址
 
 namespace esphome {
 namespace wf183de {
