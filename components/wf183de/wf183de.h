@@ -5,8 +5,10 @@ namespace wf183de {
 
 class WF183DESensor : public PollingComponent {
  public:
-  Sensor *temperature_sensor = new Sensor();
-  Sensor *pressure_sensor = new Sensor();
+ // Sensor *temperature_sensor = new Sensor();
+  //Sensor *pressure_sensor = new Sensor();
+  Sensor *temperature_sensor{new Sensor()};
+  Sensor *pressure_sensor{new Sensor()};
 
   WF183DESensor(uint32_t update_interval) : PollingComponent(update_interval) {}
 
