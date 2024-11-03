@@ -2,7 +2,7 @@
 #define WF183DE_I2C_ADDRESS 0x6D  // 使用实际的I2C地址
 
 namespace esphome {
-namespace wf183de {
+namespace wf183de1 {
 
 class WF183DESensor : public PollingComponent {
  public:
