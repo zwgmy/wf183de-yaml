@@ -5,19 +5,6 @@
 #define WF183DE_I2C_ADDRESS 0x6D  // 使用实际的I2C地址
 
 
-static const char *const TAG = "bmp280_i2c.sensor";
-
-/// This class implements support for the BMP280 Temperature+Pressure i2c sensor.
-class BMP280I2CComponent : public esphome::bmp280_base::BMP280Component, public i2c::I2CDevice {
- public:
-  bool read_byte(uint8_t a_register, uint8_t *data) override;
-  bool write_byte(uint8_t a_register, uint8_t data) override;
-  bool read_bytes(uint8_t a_register, uint8_t *data, size_t len) override;
-  bool read_byte_16(uint8_t a_register, uint16_t *data) override;
-  void dump_config() override;
-};
-
-
 namespace esphome {
 namespace wf183de {
 
